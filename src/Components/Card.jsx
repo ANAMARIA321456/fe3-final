@@ -1,22 +1,38 @@
-import React from "react";
-
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types"; // Import PropTypes
 
 const Card = ({ name, username, id }) => {
+  const addFav = () => {
+    const favs = JSON.parse(localStorage.getItem("favorites")) || [];
+    if (!favs.some((fav) => fav.id === id)) {
+      favs.push({ name, username, id });
+      localStorage.setItem("favorites", JSON.stringify(favs));
+    }
+  };
 
-  const addFav = ()=>{
-    // Aqui iria la logica para agregar la Card en el localStorage
-  }
+  const defaultImage = "src/Source/images/doctor.jpg";
 
   return (
     <div className="card">
-        {/* En cada card deberan mostrar en name - username y el id */}
-
-        {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
-
-        {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-        <button onClick={addFav} className="favButton">Add fav</button>
+      <img src={defaultImage} alt={name} className="imgDoctor" />
+      <h3>
+        {name} - {username}
+      </h3>
+      <Link to={`/dentist/${id}`} className="linkToDetail">
+        View Details
+      </Link>
+      <button onClick={addFav} className="favButton">
+        Add fav
+      </button>
     </div>
   );
+};
+
+// Add PropTypes for validation
+Card.propTypes = {
+  name: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default Card;
